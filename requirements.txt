@@ -1,0 +1,52 @@
+from playwright.sync_api import sync_playwright
+import csv
+import time
+
+def buscar_linkedin_em_github():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        resultados = []
+
+        # Ajuste o range para mais páginas se quiser (ex: range(1, 20))
+        for i in range(1, 6):
+            url = f"https://github.com/search?q=location%3A%22S%C3%A3o+Paulo%22+++language%3AJava+is%3Apublic+sort%3Astars&type=users&p={i}"
+            print(f"[+] Acessando página {i}...")
+            page.goto(url)
+            page.wait_for_timeout(2000)  # 2 segundos para garantir carregamento
+
+            perfis = page.locator("a.mr-1").all()
+            links_perfis = [el.get_attribute("href") for el in perfis if el.get_attribute("href")]
+
+            for perfil in links_perfis:
+                perfil_url = f"https://github.com{perfil}"
+                print(f"    -> Verificando perfil: {perfil_url}")
+                try:
+                    page.goto(perfil_url)
+                    time.sleep(1.5)  # Delay para evitar bloqueios
+
+                    linkedin = None
+                    todos_links = page.locator("a").all()
+
+                    for link in todos_links:
+                        href = link.get_attribute("href")
+                        if href and "linkedin.com" in href.lower():
+                            linkedin = href
+                            break
+
+                    if linkedin:
+                        print(f"        ✅ LinkedIn encontrado: {linkedin}")
+                        resultados.append([perfil_url, linkedin])
+                except Exception as e:
+                    print(f"        ⚠️ Erro ao processar {perfil_url}: {e}")
+
+        # Salvando resultados em CSV
+        with open("perfis_com_linkedin.csv", "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(["GitHub", "LinkedIn"])
+            writer.writerows(resultados)
+
+        print("\n[✓] Extração concluída! Arquivo salvo como perfis_com_linkedin.csv")
+        browser.close()
+
+buscar_linkedin_em_github()
