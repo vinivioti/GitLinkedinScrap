@@ -24,24 +24,29 @@ Este projeto automatiza a busca de perfis públicos no GitHub localizados em **S
 
 ### 2. Clonar o repositório e criar ambiente virtual
 
-```bash
+
 git clone https://github.com/vinivioti/POC_ScrappingGit.git
 cd POC_ScrappingGit
 
 Criar e ativar virtualenv
 Windows (PowerShell):
 
+```bash
 python -m venv venv
 .\venv\Scripts\Activate.ps1
+```
 
 MacOS/Linux:
+```bash
 python3 -m venv venv
 source venv/bin/activate
+```
 
 ### 3. Instalar dependências
 
+```bash
 pip install -r requirements.txt
-
+```
 (Se não existir, crie o arquivo requirements.txt com as linhas abaixo)
 
 playwright
@@ -49,12 +54,16 @@ openpyxl
 
 ### 4. Instalar navegadores do Playwright
 
+```bash
 python -m playwright install
+```
 
 📖 Como usar
 Executar o script passando as páginas que deseja analisar.
 
+```bash
 python github_scrapper.py --start 1 --end 3 --show
+```
 
 --start: página inicial da busca no GitHub
 
@@ -62,22 +71,22 @@ python github_scrapper.py --start 1 --end 3 --show
 
 --show: (opcional) exibe o navegador para acompanhar cliques (remova para rodar headless)
 
-Atenção:
+## Atenção:
 Cada página tem até 10 perfis, e o script abre perfil por perfil para capturar o LinkedIn. Rodar muitas páginas pode levar tempo e consumir recursos, use com moderação.
 
 
 📨 PowerShell para executar e enviar relatório por e-mail (Windows)
-Temos um script PowerShell run_and_send.ps1 que:
+Temos um script PowerShell GitLinkedin.ps1 que:
 
-Ativa o ambiente virtual
+- Ativa o ambiente virtual
 
-Executa o scraper Python
+- Executa o scraper Python
 
-Envia o arquivo Excel gerado por e-mail via SMTP
+- Envia o arquivo Excel gerado por e-mail via SMTP
 
 
-Configurar o PowerShell
-Edite o arquivo run_and_send.ps1 e configure as variáveis de e-mail:
+## Configurar o PowerShell:
+Edite o arquivo GitLinkedin.ps1 e configure as variáveis de e-mail:
 
 $smtpServer = "smtp.seuprovedor.com"
 $smtpPort = 587
@@ -88,27 +97,47 @@ $emailTo = "rh@empresa.com"
 $emailSubject = "Relatório GitHub LinkedIn"
 $emailBody = "Segue em anexo o relatório atualizado dos perfis GitHub com LinkedIn."
 
-Rodar o PowerShell
+## Rodar o PowerShell:
 Abra o PowerShell com permissão e rode:
 
-.\run_and_send.ps1 -start 1 -end 3 -show
-Parâmetros -start e -end controlam o intervalo de páginas buscadas.
+Exemplo:
+```bash
+.\GitLinkedin.ps1 -start 1 -end 3 -show
+```
+obs1: - Parâmetros -start e -end controlam o intervalo de páginas buscadas.
+
+obs2: - Parâmetro -show abre a página visualmente se não quiser é só não passar esse parâmetro que rodará headless
+
+Exemplo:
+```bash
+.\GitLinkedin.ps1 -start 1 -end 3
+```
+
 
 📄 Arquivos importantes
-github_scrapper.py: Script principal em Python
 
-requirements.txt: Dependências Python
+- github_scrapper.py: Script principal em Python
 
-run_and_send.ps1: Script PowerShell para rodar scraper e enviar e-mail
+- requirements.txt: Dependências Python
 
-perfis_com_linkedin.xlsx: Planilha gerada com os resultados
+- GitLinkedin.ps1: Script PowerShell para rodar scraper e enviar e-mail
 
-❓ Dúvidas / Problemas
-Verifique se Python e Playwright estão instalados corretamente
+- perfis_com_linkedin.xlsx: Planilha gerada com os resultados
 
-Use o parâmetro --show para acompanhar a execução
+❓ Dúvidas / Problemas:
 
-Confira as permissões do PowerShell para rodar scripts (Set-ExecutionPolicy RemoteSigned)
+- Verifique se Python e Playwright estão instalados corretamente
 
-🙌 Agradecimentos
-Feito com 💻 + ☕️ por Vioti - automação para facilitar o trabalho do RH!
+- Use o parâmetro --show para acompanhar a execução
+
+- Confira as permissões do PowerShell para rodar scripts (Set-ExecutionPolicy RemoteSigned)
+
+## 🙌 Agradecimentos
+
+Feito com 💻 + ☕️ por Vioti - automações para facilitar a vida!!
+
+
+
+
+
+
